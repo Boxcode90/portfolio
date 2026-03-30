@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Portfolio — Your Name</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0a0a0a;
+    --surface: #141414;
+    --border: rgba(255,255,255,0.08);
+    --border-hover: rgba(255,255,255,0.18);
+    --text: #f0ece4;
+    --muted: #6b6b6b;
+    --accent: #d4b483;
+    --accent-dim: rgba(212,180,131,0.12);
+  }
+
+  html, body {
+    height: 100%;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    font-size: 14px;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  .shell {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 28px 56px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-logo {
+    font-family: 'DM Serif Display', serif;
+    font-size: 20px;
+    letter-spacing: -0.3px;
+    color: var(--text);
+    text-decoration: none;
+  }
+
+  .nav-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  .status-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: #4caf50;
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%,100% { opacity: 1; } 50% { opacity: 0.4; }
+  }
+
+  main {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    max-width: 1200px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 80px 56px;
+    align-items: center;
+  }
+
+  .left { padding-right: 64px; }
+
+  .greeting {
+    font-size: 13px;
+    color: var(--accent);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .greeting::before {
+    content: '';
+    display: inline-block;
+    width: 24px; height: 1px;
+    background: var(--accent);
+  }
+
+  h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(36px, 4vw, 52px);
+    line-height: 1.12;
+    letter-spacing: -1px;
+    margin-bottom: 24px;
+    color: var(--text);
+  }
+
+  h1 span { color: var(--accent); font-style: italic; }
+
+  .bio {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.9;
+    max-width: 380px;
+    margin-bottom: 40px;
+  }
+
+  .actions { display: flex; gap: 14px; align-items: center; }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    background: var(--accent);
+    color: #0a0a0a;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: opacity 0.2s;
+  }
+
+  .btn-primary:hover { opacity: 0.82; }
+
+  .btn-ghost {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--muted);
+    background: none;
+    border: none;
+    cursor: pointer;
+    letter-spacing: 0.06em;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    transition: color 0.2s;
+  }
+
+  .btn-ghost:hover { color: var(--text); }
+
+  .right {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+
+  .card {
+    border: 1px solid var(--border);
+    padding: 36px 24px 28px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    cursor: pointer;
+    transition: border-color 0.25s, background 0.25s;
+    text-align: center;
+    min-height: 160px;
+    background: transparent;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--accent-dim);
+    opacity: 0;
+    transition: opacity 0.25s;
+  }
+
+  .card:hover { border-color: var(--border-hover); }
+  .card:hover::before { opacity: 1; }
+
+  .card-icon {
+    width: 36px; height: 36px;
+    stroke: var(--muted);
+    transition: stroke 0.25s;
+  }
+
+  .card:hover .card-icon { stroke: var(--accent); }
+
+  .card-label {
+    font-size: 12px;
+    color: var(--muted);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    transition: color 0.25s;
+    position: relative;
+  }
+
+  .card:hover .card-label { color: var(--text); }
+
+  footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 24px;
+    padding: 28px 56px;
+    border-top: 1px solid var(--border);
+  }
+
+  .social-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px; height: 36px;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    text-decoration: none;
+    transition: border-color 0.2s, color 0.2s;
+  }
+
+  .social-link svg { width: 16px; height: 16px; stroke: currentColor; fill: none; }
+  .social-link:hover { border-color: var(--border-hover); color: var(--text); }
+
+  .overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    z-index: 100;
+    overflow-y: auto;
+    padding: 60px 40px;
+    backdrop-filter: blur(4px);
+  }
+
+  .overlay.open { display: block; }
+
+  .panel {
+    max-width: 860px;
+    margin: 0 auto;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 48px;
+  }
+
+  .panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 40px;
+  }
+
+  .panel-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 32px;
+    letter-spacing: -0.5px;
+  }
+
+  .close-btn {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    padding: 8px 16px;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: border-color 0.2s, color 0.2s;
+  }
+
+  .close-btn:hover { border-color: var(--border-hover); color: var(--text); }
+
+  .projects-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+
+  .project-card {
+    border: 1px solid var(--border);
+    overflow: hidden;
+    transition: border-color 0.25s;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .project-card:hover { border-color: var(--border-hover); }
+
+  /* ── FIXED: screenshot thumbnail ── */
+  .project-thumb {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: #1a1a1a;
+    border-bottom: 1px solid var(--border);
+    overflow: hidden;
+    position: relative;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .project-thumb img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top;
+    display: block;
+  }
+
+  .project-thumb-placeholder {
+    color: var(--muted);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .project-info {
+    padding: 20px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .project-name {
+    font-family: 'DM Serif Display', serif;
+    font-size: 20px;
+    margin-bottom: 8px;
+  }
+
+  .project-desc {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.8;
+    margin-bottom: 16px;
+    flex: 1;
+  }
+
+  .project-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 18px;
+  }
+
+  .tag {
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent);
+    border: 1px solid rgba(212,180,131,0.25);
+    padding: 3px 10px;
+  }
+
+  .project-links { display: flex; gap: 10px; }
+
+  .project-link {
+    font-size: 11px;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    border: 1px solid var(--border);
+    padding: 7px 14px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: border-color 0.2s, color 0.2s;
+  }
+
+  .project-link:hover { border-color: var(--border-hover); color: var(--text); }
+  .project-link.primary { border-color: rgba(212,180,131,0.4); color: var(--accent); }
+  .project-link.primary:hover { border-color: var(--accent); }
+
+  .about-body { max-width: 560px; }
+  .about-body p { font-size: 13px; color: var(--muted); line-height: 1.9; margin-bottom: 16px; }
+  .about-body strong { color: var(--text); font-weight: 400; }
+
+  .skills-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 28px;
+  }
+
+  .contact-grid { display: grid; gap: 14px; }
+
+  .contact-item {
+    border: 1px solid var(--border);
+    padding: 20px 24px;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+  }
+
+  .contact-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 4px; }
+  .contact-value { font-size: 14px; color: var(--text); text-decoration: none; }
+  .contact-value:hover { color: var(--accent); }
+
+  .blog-post { border-bottom: 1px solid var(--border); padding: 24px 0; }
+  .blog-post:last-child { border-bottom: none; }
+  .post-date { font-size: 11px; color: var(--muted); margin-bottom: 6px; letter-spacing: 0.06em; }
+  .post-title { font-family: 'DM Serif Display', serif; font-size: 20px; margin-bottom: 8px; }
+  .post-excerpt { font-size: 12px; color: var(--muted); line-height: 1.8; }
+  .post-link { font-size: 11px; color: var(--accent); letter-spacing: 0.06em; text-transform: uppercase; text-decoration: none; display: inline-block; margin-top: 12px; }
+
+  @media (max-width: 768px) {
+    main { grid-template-columns: 1fr; padding: 48px 24px; }
+    .left { padding-right: 0; margin-bottom: 48px; }
+    nav, footer { padding: 20px 24px; }
+    .projects-grid { grid-template-columns: 1fr; }
+    .panel { padding: 28px 24px; }
+    .overlay { padding: 24px 16px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="shell">
+
+  <nav>
+    <a href="#" class="nav-logo">YourName</a>
+    <span class="nav-status">
+      <span class="status-dot"></span>
+      Available for work
+    </span>
+  </nav>
+
+  <main>
+    <div class="left">
+      <p class="greeting">Hello there</p>
+      <h1>I'm <span>Your Name</span></h1>
+      <p class="bio">
+        A developer who builds clean, thoughtful digital experiences.
+        I care about the details — from pixel-perfect layouts to smooth
+        interactions that feel right.
+      </p>
+      <div class="actions">
+        <a href="./resume.pdf" class="btn-primary" target="_blank">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          View Resume
+        </a>
+        <button class="btn-ghost" onclick="openPanel('projects')">View work →</button>
+      </div>
+    </div>
+
+    <div class="right">
+      <div class="card" onclick="openPanel('projects')">
+        <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke-width="1.25"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
+        <span class="card-label">My Projects</span>
+      </div>
+      <div class="card" onclick="openPanel('about')">
+        <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke-width="1.25"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+        <span class="card-label">About me</span>
+      </div>
+      <div class="card" onclick="openPanel('blog')">
+        <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke-width="1.25"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+        <span class="card-label">My Blog</span>
+      </div>
+      <div class="card" onclick="openPanel('contact')">
+        <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke-width="1.25"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        <span class="card-label">Contact me</span>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <a href="#" class="social-link" title="GitHub">
+      <svg viewBox="0 0 24 24"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+    </a>
+    <a href="#" class="social-link" title="Twitter / X">
+      <svg viewBox="0 0 24 24"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"/></svg>
+    </a>
+    <a href="#" class="social-link" title="LinkedIn">
+      <svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+    </a>
+    <a href="#" class="social-link" title="Dribbble">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8.56 2.75c4.37 6.03 6.02 9.42 8.03 17.72m2.54-15.38c-3.72 4.35-8.94 5.66-16.88 5.85m19.5 1.9c-3.5-.93-6.63-.82-8.94 0-2.58.92-5.01 2.86-7.44 6.32"/></svg>
+    </a>
+  </footer>
+</div>
+
+<!-- PROJECTS PANEL -->
+<div class="overlay" id="overlay-projects">
+  <div class="panel">
+    <div class="panel-header">
+      <h2 class="panel-title">Projects</h2>
+      <button class="close-btn" onclick="closePanel('projects')">Close ✕</button>
+    </div>
+
+    <div class="projects-grid">
+
+      <!-- PROJECT 1 -->
+      <div class="project-card">
+        <div class="project-card">
+          <div class="project-thumb">
+            <span class="project-thumb-placeholder">screenshot here</span>
+          </div>
+          <div class="project-info">
+            <h3 class="project-name">RAG based Academic Chatbot</h3>
+            <p class="project-desc">Developed an intelligent academic assistant using Retrieval-Augmented Generation (RAG) to provide accurate, syllabus-specific responses for Anna University Regulation 2021. The system retrieves relevant academic content and generates contextual answers to student queries. Integrated additional utilities including OCR-based GPA/CGPA calculation from mark sheets and an attendance calculator to help students track eligibility. 
+              The chatbot enhances accessibility to academic information through a unified, interactive platform.</p>
+            <div class="project-tags">
+              <span class="tag">React</span>
+              <span class="tag">Supabase</span>
+              <span class="tag">Ollama</span>
+            </div>
+            <div class="project-links">
+              <a href="https://github.com/Jerin133/AI_StudentChatBot" class="project-link" target="_blank">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+                Code
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="project-thumb" id="thumb-2">
+          <img src="./screenshots/Home View.png" alt="Student Manager">
+     </div>
+          <span class="project-thumb-placeholder">screenshot here</span>
+        </div>
+        <div class="project-info">
+          <h3 class="project-name">Project One</h3>
+          <p class="project-desc">A short description of what this project does and the problem it solves.</p>
+          <div class="project-tags">
+            <span class="tag">React</span>
+            <span class="tag">Node.js</span>
+            <span class="tag">Postgres</span>
+          </div>
+          <div class="project-links">
+            <!-- Remove this <a> if project is not hosted -->
+            <a href="https://your-live-site.com" class="project-link primary" target="_blank">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              Live Site
+            </a>
+            <!-- Remove this <a> if repo is private -->
+            <a href="https://github.com/yourusername/project" class="project-link" target="_blank">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+              Code
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- PROJECT 2 -->
+  
+
+      <!-- Add more projects by copying a project-card block above -->
+
+    </div>
+  </div>
+</div>
+
+<!-- ABOUT PANEL -->
+<div class="overlay" id="overlay-about">
+  <div class="panel">
+    <div class="panel-header">
+      <h2 class="panel-title">About me</h2>
+      <button class="close-btn" onclick="closePanel('about')">Close ✕</button>
+    </div>
+    <div class="about-body">
+      <p>I'm a <strong>full-stack developer</strong> based in [Your City], building products that are both functional and considered. I've been writing code for [X] years.</p>
+      <p>Currently working at [Company] / freelancing / open to opportunities. I'm most comfortable in [your stack], but I pick up new tools quickly.</p>
+      <p>When I'm not coding I'm [hobby, interest, something human].</p>
+      <div class="skills-row">
+        <span class="tag">JavaScript</span>
+        <span class="tag">TypeScript</span>
+        <span class="tag">React</span>
+        <span class="tag">Node.js</span>
+        <span class="tag">Python</span>
+        <span class="tag">PostgreSQL</span>
+        <span class="tag">Docker</span>
+        <span class="tag">Figma</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- BLOG PANEL -->
+<div class="overlay" id="overlay-blog">
+  <div class="panel">
+    <div class="panel-header">
+      <h2 class="panel-title">Writing</h2>
+      <button class="close-btn" onclick="closePanel('blog')">Close ✕</button>
+    </div>
+    <div class="blog-post">
+      <p class="post-date">March 2025</p>
+      <h3 class="post-title">Your first blog post title</h3>
+      <p class="post-excerpt">A short excerpt or summary of what this post is about — keep it to 1–2 lines so readers get the idea quickly.</p>
+      <a href="https://yourblog.com/post-1" class="post-link" target="_blank">Read more →</a>
+    </div>
+    <div class="blog-post">
+      <p class="post-date">January 2025</p>
+      <h3 class="post-title">Another thing you wrote about</h3>
+      <p class="post-excerpt">Another short excerpt or teaser for this post.</p>
+      <a href="#" class="post-link">Read more →</a>
+    </div>
+  </div>
+</div>
+
+<!-- CONTACT PANEL -->
+<div class="overlay" id="overlay-contact">
+  <div class="panel">
+    <div class="panel-header">
+      <h2 class="panel-title">Get in touch</h2>
+      <button class="close-btn" onclick="closePanel('contact')">Close ✕</button>
+    </div>
+    <div class="contact-grid">
+      <div class="contact-item">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6b6b6b" stroke-width="1.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        <div>
+          <p class="contact-label">Email</p>
+          <a href="mailto:your@email.com" class="contact-value">your@email.com</a>
+        </div>
+      </div>
+      <div class="contact-item">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6b6b6b" stroke-width="1.5"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+        <div>
+          <p class="contact-label">GitHub</p>
+          <a href="https://github.com/yourusername" class="contact-value" target="_blank">github.com/yourusername</a>
+        </div>
+      </div>
+      <div class="contact-item">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6b6b6b" stroke-width="1.5"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+        <div>
+          <p class="contact-label">LinkedIn</p>
+          <a href="https://linkedin.com/in/yourusername" class="contact-value" target="_blank">linkedin.com/in/yourusername</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function openPanel(id) {
+    document.getElementById('overlay-' + id).classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closePanel(id) {
+    document.getElementById('overlay-' + id).classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  document.querySelectorAll('.overlay').forEach(el => {
+    el.addEventListener('click', e => {
+      if (e.target === el) {
+        el.classList.remove('open');
+        document.body.style.overflow = '';
+      }
+    });
+  });
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+      document.querySelectorAll('.overlay.open').forEach(el => {
+        el.classList.remove('open');
+        document.body.style.overflow = '';
+      });
+    }
+  });
+  const slideshows = {
+  'thumb-1': [
+    './screenshots/Home View.png',
+    './screenshots/Add Student(1).png',
+    './screenshots/Display Student.png',
+    './screenshots/Search Student.png',
+    './screenshots/Delete Student.png',
+    './screenshots/Sorting Functionality 1.png',
+    './screenshots/Sorting Functionality 2.png',
+  ]
+};
+
+Object.entries(slideshows).forEach(([id, images]) => {
+  const thumb = document.getElementById(id);
+  const img = thumb.querySelector('img');
+  let i = 0, timer = null;
+
+  thumb.addEventListener('mouseenter', () => {
+    timer = setInterval(() => {
+      i = (i + 1) % images.length;
+      img.src = images[i];
+    }, 900);
+  });
+
+  thumb.addEventListener('mouseleave', () => {
+    clearInterval(timer);
+    i = 0;
+    img.src = images[0];
+  });
+});
+</script>
+</body>
+</html>
